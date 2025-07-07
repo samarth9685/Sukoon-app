@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { auth, provider } from "./firebase-config";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithRedirect, getRedirectResult } from "firebase/auth";
 
 function Login() {
-  const handleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      console.log("Logged in user:", user);
-      alert(`Welcome, ${user.displayName}`);
-    } catch (error) {
-      console.error("Login error:", error);
-    }
+  const handleLogin = () => {
+    signInWithRedirect(auth, provider);
   };
+
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result && result.user) {
+          const user = result.user;
+          console.log("User logged in (redirect):", user);
+          alert(`Welcome, ${user.displayName}`);
+        }
+      })
+      .catch((error) => {
+        console.error("Redirect login error:", error.message);
+        alert("Login failed: " + error.message);
+      });
+  }, []);
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
