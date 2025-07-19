@@ -70,7 +70,6 @@ Thumbs.db
 *.seed
 *.pid.lock
 *.log.*
-*.env
 
 # Local development files
 .idea/

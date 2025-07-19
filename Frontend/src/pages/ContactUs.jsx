@@ -16,7 +16,8 @@ const ContactUs = () => {
     emailjs
       .sendForm('service_j6fpbne', 'template_8qfw96m', e.target, 'ocD6sjKNO1COawjro')
       .then((result) => {
-        alert('Email sent successfully:', result.text);
+        console.log('Email sent successfully:', result.text)
+        alert('Email sent successfully!');
         setFormData({
           name: '',
           email: '',
@@ -24,6 +25,8 @@ const ContactUs = () => {
         });
       })
       .catch((error) => {
+        console.error('Email sending failed:', error);
+
         alert('Email sending failed:', error.text);
       });
   };

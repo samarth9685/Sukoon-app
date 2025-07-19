@@ -1,29 +1,43 @@
 import React from "react";
-import { auth } from "../components/firebase-config";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import API from "../api";
+import { app } from "../components/firebase-config";
 
 function Login({ setIsAuth }) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        localStorage.setItem("isAuth", true);
-        setIsAuth(true);
-        navigate("/");
-      })
-      .catch((error) => {
-        // Handle sign-in errors here
-        console.error("Error signing in with Google:", error);
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Sending user data to backend:", user); 
+      await API.post("/users", {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
       });
+      console.log("Data sent successfully");
+      // Set localStorage auth flags
+      localStorage.setItem("isAuth", "true");
+      localStorage.setItem("userName", user.displayName);
+      localStorage.setItem("userPhoto", user.photoURL);
+      setIsAuth(true);
+      alert("Login successful!");
+      navigate("/"); // Redirect to homepage
+    } catch (err) {
+      console.error("Google login failed:", err);
+      alert("Google login failed");
+    }
   };
 
   return (
     <div className="loginPage">
       <p>Sign In With Google to Continue</p>
-      <button className="login-with-google-btn" onClick={signInWithGoogle}>
+      <button className="login-with-google-btn" onClick={handleGoogleLogin}>
         Sign in with Google
       </button>
     </div>
