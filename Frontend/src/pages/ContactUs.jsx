@@ -14,7 +14,7 @@ const ContactUs = () => {
 
     
       try {
-       const response = await fetch('https://sukoon-backend-927o.onrender.com/api/contact', {
+       const response = await fetch('https://sukoon-backend-r0zk.onrender.com/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
