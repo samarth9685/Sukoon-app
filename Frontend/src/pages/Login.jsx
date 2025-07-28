@@ -14,7 +14,7 @@ function Login({ setIsAuth }) {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       console.log("Sending user data to backend:", user); 
-      await API.post("/api/users", {
+      await API.post("/users", {
         name: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
