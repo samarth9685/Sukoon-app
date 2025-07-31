@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.VITE_API_URL, // your backend URL
+  baseURL: "https://sukoon-backend-r0zk.onrender.com/api" // your backend URL
 });
 
 API.interceptors.request.use((req) => {
